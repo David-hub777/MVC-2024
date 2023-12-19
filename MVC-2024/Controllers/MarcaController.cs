@@ -36,7 +36,7 @@ namespace MVC_2024.Controllers
         // POST: MarcaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(marcaModel marca)
+        public ActionResult Create(MarcaModel marca)
         {
             Contexto.Marcas.Add(marca);
             Contexto.Database.EnsureCreated();
