@@ -15,15 +15,29 @@ namespace MVC_2024.Controllers
         // GET: MarcaController
         public ActionResult Index()
         {
-
-            return View();
+            List<MarcaModel> lista = this.Contexto.Marcas.ToList();
+            return View(lista);
         }
 
         // GET: MarcaController/Details/5
         public ActionResult Details(int id)
         {
+            List<MarcaModel> lista = this.Contexto.Marcas.ToList();
+            // Encuentra el índice del elemento con el ID especificado
+            int indice = lista.FindIndex(item => item.Id == id);
 
-            return View();
+            // Verifica si se encontró el elemento
+            if (indice != -1)
+            {
+                // Si se encontró, pasa el elemento correspondiente a la vista
+                return View(lista[indice]);
+            }
+            else
+            {
+                // Si no se encontró, puedes manejarlo de la manera que consideres apropiada
+                // Por ejemplo, puedes redirigir a una página de error.
+                return RedirectToAction("Error");
+            }
         }
 
         // GET: MarcaController/Create
