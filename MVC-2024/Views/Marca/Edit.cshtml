@@ -1,0 +1,38 @@
+﻿@model MVC_2024.Models.MarcaModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MarcaModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input type="text" asp-for="Id" readonly size="10" style="border: none; background-color: transparent; outline: none;" />
+            </div> 
+            <div class="form-group mt-2">
+                <label asp-for="NomMarca" class="control-label mt-2 mb-2"></label>
+                <input asp-for="NomMarca" class="form-control" />
+                <span asp-validation-for="NomMarca" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-2 mb-5">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
