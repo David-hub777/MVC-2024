@@ -155,7 +155,21 @@ namespace MVC_2024.Controllers
         // GET: MarcaController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            // Busca el elemento directamente en la base de datos usando el id proporcionado
+            MarcaModel elemento = this.Contexto.Marcas.Find(id);
+
+            // Verifica si se encontró el elemento
+            if (elemento != null)
+            {
+                // Si se encontró, pasa el elemento correspondiente a la vista
+                return View(elemento);
+            }
+            else
+            {
+                // Si no se encontró, puedes manejarlo de la manera que consideres apropiada
+                // Por ejemplo, puedes redirigir a una página de error.
+                return RedirectToAction("Error");
+            }
         }
 
         // POST: MarcaController/Delete/5
@@ -165,11 +179,21 @@ namespace MVC_2024.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                MarcaModel elemento = Contexto.Marcas.Find(id);
+                if (elemento != null)
+                {
+                    Contexto.Marcas.Remove(elemento);
+                    Contexto.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return RedirectToAction("Error");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return RedirectToAction("Error");
             }
         }
     }
