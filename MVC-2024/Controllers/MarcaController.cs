@@ -15,6 +15,7 @@ namespace MVC_2024.Controllers
         // GET: MarcaController
         public ActionResult Index()
         {
+
             return View();
         }
 
