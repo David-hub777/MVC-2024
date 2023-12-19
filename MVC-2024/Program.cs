@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using MVC_2024.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
+
+//metemos la base de datos al builder nuget EntityFrameworkCore.SqlServer
+builder.Services.AddDbContext<Contexto>(options => options.UseSqlServer(configuration.GetConnectionString("Contexto")));
 
 var app = builder.Build();
 
