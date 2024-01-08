@@ -1,0 +1,13 @@
+﻿@model MVC_2024.Models.MarcaModel
+
+@{
+    // ViewData["Title"] = "Details";
+}
+
+<h1>Desplegable</h1>
+
+@Html.DropDownList("LasMarcas" , new List<SelectListItem>{
+    new SelectListItem{Text = "Opel" , Value = "1" , Selected = true},
+    new SelectListItem{Text = "holaa" , Value = "2" },
+    new SelectListItem{Text = "UNAMARCA" , Value = "3"}
+})

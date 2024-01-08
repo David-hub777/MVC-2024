@@ -19,6 +19,13 @@ namespace MVC_2024.Controllers
             return View(lista);
         }
 
+        public ActionResult Desplegable()
+        {
+            
+            return View();
+        }
+
+
         // GET: MarcaController/Details/5
         public ActionResult Details(int id)
         {
