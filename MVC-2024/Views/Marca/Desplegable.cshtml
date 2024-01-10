@@ -1,13 +1,41 @@
 ﻿@model MVC_2024.Models.MarcaModel
-
 @{
-    // ViewData["Title"] = "Details";
+    ViewData["Title"] = "PruebaDesplegable";
 }
 
 <h1>Desplegable</h1>
 
+@* Version Agustin DEFINITIVA *@
+@Html.DropDownList("Marcas", "Selecciona una marca...")
+<br />
+<br />
+@* Version Antigua (Primera prueba) *@
+@* 
 @Html.DropDownList("LasMarcas" , new List<SelectListItem>{
-    new SelectListItem{Text = "Opel" , Value = "1" , Selected = true},
+    new SelectListItem{Text = "Opel" , Value = "1" },//, Selected = true
     new SelectListItem{Text = "holaa" , Value = "2" },
     new SelectListItem{Text = "UNAMARCA" , Value = "3"}
-})
+}, "Desplegable de Prueba")
+<br />
+<br />
+ *@
+
+<select id="unamarca" name="unamarca">
+    <option value="">Selecciona una marca...</option>
+    @foreach (var item in ViewBag.Marcas2)
+    {
+        <option value="@item.Id">@item.NomMarca</option>
+    }
+</select>
+
+
+
+
+@*Version Propia BY chatGPT *@
+@* 
+<br />
+<br />
+@model List<MVC_2024.Models.MarcaModel>
+@Html.DropDownList("LasMarcas", 
+new SelectList(Model, "Id", "Nombre"), "Selecciona una marca...") 
+ *@

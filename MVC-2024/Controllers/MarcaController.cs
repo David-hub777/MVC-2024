@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC_2024.Models;
 
 namespace MVC_2024.Controllers
@@ -21,7 +22,12 @@ namespace MVC_2024.Controllers
 
         public ActionResult Desplegable()
         {
-            
+            //ChatGPT
+            //List<MarcaModel> lista = this.Contexto.Marcas.ToList();
+
+        //ViewBag IMPORTANTE !!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ViewBag.Marcas = new SelectList(Contexto.Marcas, "Id", "NomMarca");
+            ViewBag.Marcas2 = this.Contexto.Marcas.ToList();
             return View();
         }
 
