@@ -6,31 +6,28 @@ using MVC_2024.Models;
 
 namespace MVC_2024.Controllers
 {
-    public class SerieController : Controller
+    public class VehiculoController : Controller
     {
         public Contexto Contexto { get; }
 
-        public SerieController(Contexto contexto)
+        public VehiculoController(Contexto contexto)
         {
             this.Contexto = contexto;
         }
-        // GET: SerieController
+        // GET: VehiculoController
         public ActionResult Index()
         {
-            List<SerieModelo> lista = this.Contexto.Series.Include(s => s.Marca).ToList();
+            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).ToList();
             return View(lista);
         }
 
-        // GET: SerieController/Details/5
+        // GET: VehiculoController/Details/5
         public ActionResult Details(int id)
         {
-            List<SerieModelo> lista = this.Contexto.Series.ToList();
-            // Encuentra el índice del elemento con el ID especificado
-            int indice = lista.FindIndex(item => item.Id == id);
-            if (indice != -1)
+            VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Find(id);
+            if (id != -1)
             {
-                // Si se encontró, pasa el elemento correspondiente a la vista
-                return View(lista[indice]);
+                return View(vehiculoModelo);
             }
             else
             {
@@ -38,27 +35,21 @@ namespace MVC_2024.Controllers
             }
         }
 
-        // GET: SerieController/Create
+        // GET: VehiculoController/Create
         public ActionResult Create()
         {
-            ViewBag.MarcaId = new SelectList(Contexto.Marcas, "Id", "NomMarca");
+            ViewBag.SerieId = new SelectList(Contexto.Series, "Id", "NomSerie");
             return View();
         }
 
-        // POST: SerieController/Create
+        // POST: VehiculoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SerieModelo serie)
+        public ActionResult Create(VehiculoModelo vehiculoModelo)
         {
-            //List<MarcaModel> lista = this.Contexto.Marcas.ToList();
-            ////MarcaModel marcaSeleccionada = lista.FirstOrDefault(m => m.Id == serie.MarcaId);
-            //serie.Marca = lista.FirstOrDefault(m => m.Id == serie.MarcaId);
-            ////serie.Marca = new MarcaModel();
-            ////serie.Marca.NomMarca=marcaSeleccionada.NomMarca;
-            ////serie.Marca.Id=marcaSeleccionada.Id;
-            Contexto.Series.Add(serie);
+            Contexto.Vehiculos.Add(vehiculoModelo);
             Contexto.Database.EnsureCreated();
-            //Contexto.Database.AutoSavepointsEnabled = true;//Crea un punto de guardado por si peta
+            //Contexto.Database.AutoSavepointsEnabled = true;//Que hace esto?
             Contexto.SaveChanges();
             try
             {
@@ -70,11 +61,11 @@ namespace MVC_2024.Controllers
             }
         }
 
-        // GET: SerieController/Edit/5
+        // GET: VehiculoController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewBag.MarcaId = new SelectList(Contexto.Marcas, "Id", "NomMarca");
-            SerieModelo elemento = this.Contexto.Series.Find(id);
+            ViewBag.SerieId = new SelectList(Contexto.Series, "Id", "NomSerie");
+            VehiculoModelo elemento = this.Contexto.Vehiculos.Find(id);
             if (elemento != null)
             {
                 return View(elemento);
@@ -85,21 +76,17 @@ namespace MVC_2024.Controllers
             }
         }
 
-        // POST: SerieController/Edit/5
+        // POST: VehiculoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, SerieModelo serieModelo)
+        public ActionResult Edit(int id, VehiculoModelo vehiculoModelo)
         {
             try
             {
-                SerieModelo elemento = this.Contexto.Series.Find(id);
+                VehiculoModelo elemento = this.Contexto.Vehiculos.Find(id);
                 if (elemento != null)
                 {
-                    elemento.Id = serieModelo.Id; 
-                    elemento.MarcaId = serieModelo.MarcaId;
-                    elemento.NomSerie = serieModelo.NomSerie;
-                    if (serieModelo.Marca != null)
-                        elemento.Marca = serieModelo.Marca;
+                    cambioVehiculo(vehiculoModelo, elemento);
                     Contexto.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
@@ -114,10 +101,20 @@ namespace MVC_2024.Controllers
             }
         }
 
-        // GET: SerieController/Delete/5
+        private static void cambioVehiculo(VehiculoModelo vehiculoModelo, VehiculoModelo elemento)
+        {
+            elemento.Id = vehiculoModelo.Id;
+            elemento.Matricula = vehiculoModelo.Matricula;
+            elemento.Color = vehiculoModelo.Color;
+            elemento.SerieId = vehiculoModelo.SerieId;
+            if (vehiculoModelo.Serie != null)
+                elemento.Serie = vehiculoModelo.Serie;
+        }
+
+        // GET: VehiculoController/Delete/5
         public ActionResult Delete(int id)
         {
-            SerieModelo elemento = this.Contexto.Series.Find(id);
+            VehiculoModelo elemento = this.Contexto.Vehiculos.Find(id);
             if (elemento != null)
             {
                 return View(elemento);
@@ -128,17 +125,17 @@ namespace MVC_2024.Controllers
             }
         }
 
-        // POST: SerieController/Delete/5
+        // POST: VehiculoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, SerieModelo serieModelo)
+        public ActionResult Delete(int id, VehiculoModelo vehiculoModelo)
         {
             try
             {
-                SerieModelo elemento = Contexto.Series.Find(id);
+                VehiculoModelo elemento = Contexto.Vehiculos.Find(id);
                 if (elemento != null)
                 {
-                    Contexto.Series.Remove(elemento);
+                    Contexto.Vehiculos.Remove(elemento);
                     Contexto.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
