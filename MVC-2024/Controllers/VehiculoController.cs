@@ -24,7 +24,8 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController/Details/5
         public ActionResult Details(int id)
         {
-            VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Find(id);
+            //VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Find(id);
+            VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).FirstOrDefault(v => v.Id == id);
             if (id != -1)
             {
                 return View(vehiculoModelo);
@@ -114,6 +115,8 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewBag.marcas = this.Contexto.Marcas.ToList();
+            ViewBag.series = this.Contexto.Series.ToList();
             VehiculoModelo elemento = this.Contexto.Vehiculos.Find(id);
             if (elemento != null)
             {

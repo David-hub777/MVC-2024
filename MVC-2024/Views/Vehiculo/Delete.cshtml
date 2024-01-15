@@ -27,7 +27,13 @@
             @Html.DisplayNameFor(model => model.Serie)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Serie.Id)
+            @Html.DisplayFor(model => model.Serie.NomSerie)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Serie.Marca)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Serie.Marca.NomMarca)
         </dd>
     </dl>
     
