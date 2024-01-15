@@ -17,7 +17,7 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController
         public ActionResult Index()
         {
-            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).ToList();
+            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).ToList();
             return View(lista);
         }
 
