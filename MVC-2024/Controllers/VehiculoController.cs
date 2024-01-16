@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC_2024.Models;
+using System.Xml.Linq;
 
 namespace MVC_2024.Controllers
 {
@@ -152,5 +153,41 @@ namespace MVC_2024.Controllers
                 return View();
             }
         }
+        // GET: VehiculoController/Busqueda
+        public ActionResult Busqueda(string matriculaVehiculo = "")
+        {
+            ViewBag.buscar = matriculaVehiculo;
+            var lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                        where (v.Matricula.Contains(matriculaVehiculo))
+                        select v;
+            if (matriculaVehiculo == null)
+            {
+                lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                            select v;
+            }
+            //else
+            //{
+            //    lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+            //            where (v.Matricula.Contains(matriculaVehiculo))
+            //            select v;
+            //}
+            return View(lista);
+        }
+
+        // GET: VehiculoController/Busqueda2
+        public ActionResult Busqueda2(String matriculaVehiculo = "")
+        {
+            ViewBag.listaMatriculas = new SelectList(Contexto.Vehiculos,"Matricula", "Matricula" , matriculaVehiculo);
+            var lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                        where (v.Matricula.Equals(matriculaVehiculo))
+                        select v;
+            if (matriculaVehiculo == "")
+            {
+                lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                        select v;
+            }
+            return View(lista);
+        }
+
     }
 }

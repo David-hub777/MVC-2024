@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MVC_2024.Models.VehiculoModelo>
+
+@{
+    ViewData["Title"] = "Busqueda2";
+}
+
+<h1>Busqueda2</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<form method="get">
+    <div class="form-group">
+        <label for="matriculaVehiculo">Buscador de Vehículos</label>
+        <select id="matriculaVehiculo" name="matriculaVehiculo" class="form-control" asp-items="ViewBag.listaMatriculas" >
+            @* asp-for="" *@
+			<option value="">-- Selecciona una Matricula --</option>
+        </select>
+        <input type="submit" value="Buscar!" class="btn btn-primary" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie.Marca)
+            </th>
+            <th>Opciones: Edit | Details | Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Matricula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Serie.NomSerie)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Serie.Marca.NomMarca)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

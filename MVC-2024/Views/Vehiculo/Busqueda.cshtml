@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MVC_2024.Models.VehiculoModelo>
+
+@{
+    ViewData["Title"] = "Busqueda";
+}
+
+<h1>Busqueda</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@using (Html.BeginForm("Busqueda", "Vehiculo", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="matriculaVehiculo">Número:</label>
+        <input type="text" name="matriculaVehiculo" class="form-control" />
+        <button type="submit" class="btn btn-outline-warning">Buscar</button>
+    </div>
+}
+
+<form method="get">
+    <div class="form-group">
+		<label for="matriculaVehiculo">Matricula:</label>
+        <input type="search" id="matriculaVehiculo" name="matriculaVehiculo" class="form-control" placeholder="Buscar por matricula" value="@ViewBag.buscar" />
+        @* value="@ViewBag.buscar" *@
+        <input type="submit" value="Buscar" class="btn btn-primary" />
+	</div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie.Marca)
+            </th>
+            <th>Opciones: Edit | Details | Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie.NomSerie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie.Marca.NomMarca)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
