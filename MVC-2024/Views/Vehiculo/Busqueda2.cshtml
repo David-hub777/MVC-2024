@@ -11,7 +11,7 @@
 </p>
 
 
-<form method="get">
+<form method="get" id="searchForm">
     <div class="form-group">
         <label for="matriculaVehiculo">Buscador de Vehículos</label>
         <select id="matriculaVehiculo" name="matriculaVehiculo" class="form-control" asp-items="ViewBag.listaMatriculas" >
@@ -21,6 +21,15 @@
         <input type="submit" value="Buscar!" class="btn btn-primary" />
     </div>
 </form>
+<script>
+    // Manejar el evento de cambio en el select
+    document.getElementById('matriculaVehiculo').addEventListener('change', function () {
+        // Enviar el formulario al hacer la selección
+        document.getElementById('searchForm').submit();
+    });
+</script>
+
+
 
 <table class="table">
     <thead>
