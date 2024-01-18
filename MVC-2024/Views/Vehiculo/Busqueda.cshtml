@@ -19,7 +19,7 @@
     </div>
 }
 
-<form method="get">
+<form method="get" id="searchForm">
     <div class="form-group">
 		<label for="matriculaVehiculo">Matricula:</label>
         <input type="search" id="matriculaVehiculo" name="matriculaVehiculo" class="form-control" placeholder="Buscar por matricula" value="@ViewBag.buscar" />
@@ -27,6 +27,23 @@
         <input type="submit" value="Buscar" class="btn btn-primary" />
 	</div>
 </form>
+
+<script>
+    // Manejar el evento de tecla presionada en el campo de búsqueda
+    document.getElementById('matriculaVehiculo').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            // Evitar la recarga de la página al enviar el formulario
+            e.preventDefault();
+            // Enviar el formulario al presionar Enter
+            document.getElementById('searchForm').submit();
+        }
+    });
+</script>
+
+
+
+
+
 
 <table class="table">
     <thead>
