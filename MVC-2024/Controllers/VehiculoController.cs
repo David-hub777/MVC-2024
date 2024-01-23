@@ -26,7 +26,8 @@ namespace MVC_2024.Controllers
         public ActionResult Details(int id)
         {
             //VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Find(id);
-            VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).FirstOrDefault(v => v.Id == id);
+            VehiculoModelo vehiculoModelo = this.Contexto.Vehiculos.Include("Serie.Marca").FirstOrDefault(v => v.Id == id);
+            // .Include(s => s.Serie).Include(m => m.Serie.Marca).
             if (id != -1)
             {
                 return View(vehiculoModelo);
