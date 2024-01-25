@@ -20,6 +20,12 @@ namespace MVC_2024.Controllers
             return View(lista);
         }
 
+        public ActionResult Listado()
+        {
+            List<MarcaModel> lista = this.Contexto.Marcas.ToList();
+            return View(lista);
+        }
+
         public ActionResult Desplegable()
         {
             //ChatGPT

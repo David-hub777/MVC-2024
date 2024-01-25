@@ -21,6 +21,44 @@ namespace MVC_2024.Controllers
             return View(lista);
         }
 
+
+        // GET: SerieController/Listado/5
+        public ActionResult Listado(int id)
+        {
+            List<SerieModelo> lista = this.Contexto.Series.Include("Marca").ToList();
+            // Encuentra el índice del elemento con el ID especificado
+            List<SerieModelo> listaMarca = lista.FindAll(item => item.MarcaId == id);
+            // List<SerieModelo> listaMarca = lista.FindAll(item => item.MarcaId == id);
+            if (id > 0)
+            {
+                // Si se encontró, pasa el elemento correspondiente a la vista
+                return View(listaMarca);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+        }
+
+        // LISTADO DE  AGUSTIN
+        public ActionResult ListadoAgustin(int id)
+        {
+            if (id >= 0)
+            {
+                MarcaModel marca = Contexto.Marcas.Include("LasSeries").FirstOrDefault(m => m.Id == id);
+                return View(marca);
+            }
+            else
+            {
+                return View(Contexto.Marcas.Find(id));
+            }
+        }
+
+
+
+
+
+
         // GET: SerieController/Details/5
         public ActionResult Details(int id)
         {

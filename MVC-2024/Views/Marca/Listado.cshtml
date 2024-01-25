@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MVC_2024.Models.MarcaModel>
+
+@{
+    ViewData["Title"] = "Listado";
+}
+
+<h1>Listado</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomMarca)
+            </th>
+            <th>
+                @Html.DisplayName("Marcas Metodo de Agustin")
+            </th>
+            <th>Opciones de Modificación</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td></td>
+            <td>
+                    <a asp-action="Listado" asp-controller="Serie" asp-route-id="@item.Id">@item.NomMarca</a>
+                    @* ChatGPT *@
+                    @* @Html.ActionLink(Html.DisplayFor(modelItem => item.NomMarca).ToString(), "Details", new { id = item.Id }) *@
+
+            </td>
+                <td>
+                    <a asp-action="ListadoAgustin" asp-controller="Serie" asp-route-id="@item.Id">@item.NomMarca</a>
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
