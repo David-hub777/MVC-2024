@@ -15,6 +15,12 @@ namespace MVC_2024.Controllers
             public string NomSerie { get; set; }
             public string Matricula { get; set; }
             public string Color { get; set; }
+            public VehiculoTotal() {// BORRAR ESTE CONSTRUCTOR O NO FUNCIONA LA VISTA DE LISTADO2 DE VEHICULOS TOTALES PERO SI FUNCIONA LA VISTA DE LISTADO DE VEHICULOS Y NO SE PORQUE . @MENSAJE_ESCRITO_POR_COPILOT
+                NomMarca = "";
+                NomSerie = "";
+                Matricula = "";
+                Color = "";
+            }
         }
         public Contexto Contexto { get; }
 
@@ -22,6 +28,13 @@ namespace MVC_2024.Controllers
         {
             this.Contexto = contexto;
         }
+        // GET: VehiculoController => IndexVehiculoTotal
+        public ActionResult Listado2()
+        {
+            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).ToList();
+            return View(lista);
+        }
+
         // GET: VehiculoController
         public ActionResult Index()
         {
