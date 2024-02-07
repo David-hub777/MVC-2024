@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MVC_2024.Models.VehiculoModelo>
+
+@{
+    ViewData["Title"] = "DesplegableComplejo";
+}
+
+<h1>DesplegableComplejo</h1>
+
+<form method="get" id="searchForm">
+    <div class="form-group">
+        <label for="marcaVehiculo">Marcas : </label>
+        <select id="marcaVehiculo" name="marcaVehiculo" class="form-control" asp-items="ViewBag.listaMarcas">
+            <option value="">-- Selecciona una Matricula --</option>
+        </select>
+        <input type="submit" value="Buscar!" class="btn btn-primary" />
+    </div>
+</form>
+<form method="get" id="searchForm2">
+    <div class="form-group">
+        <label for="serieVehiculo">Series : </label>
+        <select id="serieVehiculo" name="serieVehiculo" class="form-control" asp-items="ViewBag.listaSeries">
+            <option value="">-- Selecciona una Serie --</option>
+        </select>
+        <input type="submit" value="Buscar!" class="btn btn-primary" />
+    </div>
+</form>
+<script>
+    // Manejar el evento de cambio en el select
+    document.getElementById('marcaVehiculo').addEventListener('change', function () {
+        // Almacenar el valor seleccionado en el almacenamiento local
+        localStorage.setItem('marcaVehiculo', this.value);
+        // Enviar el formulario al hacer la selección
+        document.getElementById('searchForm').submit();
+    });
+    //El segundo select se envia automaticamente al seleccionar una marca
+    //serieVehiculo
+    document.getElementById('serieVehiculo').addEventListener('change', function () {
+        document.getElementById('searchForm').submit();
+        document.getElementById('searchForm2').submit();
+    });
+    // Recuperar y establecer la selección almacenada al cargar la página
+    window.addEventListener('load', function () {
+        var marcaVehiculo = localStorage.getItem('marcaVehiculo');
+        if (marcaVehiculo !== null) {
+            document.getElementById('marcaVehiculo').value = marcaVehiculo;
+        }
+    });
+</script>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th> 
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="mt-5 mb-5">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+

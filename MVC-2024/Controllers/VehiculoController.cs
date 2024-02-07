@@ -9,6 +9,13 @@ namespace MVC_2024.Controllers
 {
     public class VehiculoController : Controller
     {
+        public class VehiculoTotal
+        {
+            public string NomMarca { get; set; }
+            public string NomSerie { get; set; }
+            public string Matricula { get; set; }
+            public string Color { get; set; }
+        }
         public Contexto Contexto { get; }
 
         public VehiculoController(Contexto contexto)
@@ -190,5 +197,38 @@ namespace MVC_2024.Controllers
             return View(lista);
         }
 
+
+        // GET: VehiculoController/DesplegableComplejo
+        public ActionResult DesplegableComplejo(String marcaVehiculo = "", String serieVehiculo = "")
+        {
+            ViewBag.listaMarcas = new SelectList(this.Contexto.Marcas, "NomMarca", "NomMarca", marcaVehiculo);
+            var listaSeries = from v in Contexto.Series.Include(s => s.Marca)
+                        where (v.Marca.NomMarca.Equals(marcaVehiculo))
+                        select v;
+            //if (marcaVehiculo == "" && serieVehiculo != "")
+            //{
+            //    listaSeries = from v in Contexto.Series.Include(s => s.Marca)
+            //            select v;
+            //}
+            ViewBag.listaSeries = new SelectList(listaSeries, "NomSerie", "NomSerie" , serieVehiculo);
+            var lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                        where (v.Serie.NomSerie.Equals(serieVehiculo))
+                        select v;
+            if (serieVehiculo == "")
+            {
+                lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca)
+                            select v;
+            }
+            return View(lista);
+        }
+
+        // GET: VehiculoController/Desplegable
+        public ActionResult Seleccion(int marcaId = 1, int serieId = 0)
+        {
+            ViewBag.lasMarcas = new SelectList(this.Contexto.Marcas, "Id", "NomMarca", marcaId);
+            ViewBag.lasSeries = new SelectList(this.Contexto.Series.Where(s => s.MarcaId == marcaId), "Id", "NomSerie", serieId);
+            List<VehiculoModelo> listaVehiculos = this.Contexto.Vehiculos.Include(s => s.Serie).Where(v => v.SerieId == serieId).Include(m => m.Serie.Marca).Where(v => v.Serie.MarcaId == marcaId).ToList();
+            return View(listaVehiculos);
+        }
     }
 }
