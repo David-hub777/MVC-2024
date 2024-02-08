@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC_2024.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace MVC_2024.Controllers
@@ -13,14 +14,15 @@ namespace MVC_2024.Controllers
         {
             public string NomMarca { get; set; }
             public string NomSerie { get; set; }
+            [Key]
             public string Matricula { get; set; }
             public string Color { get; set; }
-            public VehiculoTotal() {// BORRAR ESTE CONSTRUCTOR O NO FUNCIONA LA VISTA DE LISTADO2 DE VEHICULOS TOTALES PERO SI FUNCIONA LA VISTA DE LISTADO DE VEHICULOS Y NO SE PORQUE . @MENSAJE_ESCRITO_POR_COPILOT
-                NomMarca = "";
-                NomSerie = "";
-                Matricula = "";
-                Color = "";
-            }
+            //public VehiculoTotal() {// BORRAR ESTE CONSTRUCTOR O NO FUNCIONA LA VISTA DE LISTADO2 DE VEHICULOS TOTALES PERO SI FUNCIONA LA VISTA DE LISTADO DE VEHICULOS Y NO SE PORQUE . @MENSAJE_ESCRITO_POR_COPILOT
+            //    NomMarca = "";
+            //    NomSerie = "";
+            //    Matricula = "";
+            //    Color = "";
+            //}
         }
         public Contexto Contexto { get; }
 
