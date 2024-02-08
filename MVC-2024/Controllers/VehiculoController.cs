@@ -14,7 +14,6 @@ namespace MVC_2024.Controllers
         {
             public string NomMarca { get; set; }
             public string NomSerie { get; set; }
-            [Key]
             public string Matricula { get; set; }
             public string Color { get; set; }
             //public VehiculoTotal() {// BORRAR ESTE CONSTRUCTOR O NO FUNCIONA LA VISTA DE LISTADO2 DE VEHICULOS TOTALES PERO SI FUNCIONA LA VISTA DE LISTADO DE VEHICULOS Y NO SE PORQUE . @MENSAJE_ESCRITO_POR_COPILOT
@@ -33,7 +32,7 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController => IndexVehiculoTotal
         public ActionResult Listado2()
         {
-            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).ToList();
+            List<VehiculoTotal> lista = this.Contexto.ViewTotal.ToList();
             return View(lista);
         }
 
@@ -53,6 +52,20 @@ namespace MVC_2024.Controllers
             if (id != -1)
             {
                 return View(vehiculoModelo);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
+        }
+
+        // GET: VehiculoController/Details2/matriculaElegida
+        public ActionResult Details2(String id)
+        {
+            if (id != null)
+            {
+                VehiculoTotal vehiculo = Contexto.ViewTotal.FirstOrDefault(v => v.Matricula == id);
+                return View(vehiculo);
             }
             else
             {

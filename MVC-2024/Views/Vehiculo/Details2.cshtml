@@ -1,0 +1,41 @@
+﻿@model MVC_2024.Controllers.VehiculoController.VehiculoTotal
+
+@{
+    ViewData["Title"] = "Details2";
+}
+
+<h1>Details2</h1>
+
+<div>
+    <h4>VehiculoModelo</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Matricula)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Matricula)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Color)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Color)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NomMarca)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NomMarca)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NomSerie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NomSerie)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
