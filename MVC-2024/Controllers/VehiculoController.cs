@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MVC_2024.Models;
 using System.ComponentModel.DataAnnotations;
@@ -33,8 +34,35 @@ namespace MVC_2024.Controllers
         public ActionResult Listado2()
         {
             List<VehiculoTotal> lista = this.Contexto.ViewTotal.ToList();
+            // var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
             return View(lista);
         }
+
+        // GET: VehiculoController => IndexVehiculoTotal
+        public ActionResult Listado3(string color = "%")
+        {
+            //primera parte del ejercicio
+            var lista = this.Contexto.ViewTotal.FromSql($"EXECUTE getSeriesVehiculos");
+
+            //segunda parte del ejercicio
+            ViewBag.elcolor = new SelectList(this.Contexto.Vehiculos.Select(v => v.Color ).Distinct().ToList(), color);
+            ViewBag.loscolores = new SelectList(this.Contexto.Vehiculos.Select(v => new { Color = v.Color }).Distinct().ToList(), "Color", "Color");// Agustin Mode
+            var color2 = "%";// "%" Significa que EMPLEA TODOS LOS COLORES
+            if (color == null){color = "%";}//Este es EXTRA: Si no se selecciona ningun color, se seleccionan todos
+            var lista2 = this.Contexto.ViewTotal.FromSql($"EXECUTE getVehiculosPorColor {color}");// {color}, {color2}
+            return View(lista2);
+        }
+        // COMO LISTADO 3 
+        public ActionResult Listado4(string color = "%")
+        {
+            var elColor = new SqlParameter("@ColorSel", color);
+            ViewBag.elcolor = new SelectList(this.Contexto.Vehiculos.Select(v => v.Color).Distinct().ToList(), color);
+            //ViewBag.loscolores = new SelectList(this.Contexto.Vehiculos.Select(v => new { Color = v.Color }).Distinct().ToList(), "Color", "Color");// Agustin Mode
+            if (color == null) { color = "%"; }//Este es EXTRA: Si no se selecciona ningun color, se seleccionan todos
+            var lista = this.Contexto.ViewTotal.FromSql($"EXECUTE getVehiculosPorColor {elColor}");
+            return View(lista);
+        }
+
 
         // GET: VehiculoController
         public ActionResult Index()

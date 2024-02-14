@@ -8,6 +8,7 @@ namespace MVC_2024.Models
         public DbSet<MarcaModel> Marcas { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<SerieModelo> Series { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<VehiculoModelo> Vehiculos { get; set; }//Debe coincidir con la TABLA de la DB
+        public DbSet<SucursalModelo> Sucursales { get; set; }//Debe coincidir con la TABLA de la DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<VehiculoTotal>().HasNoKey();

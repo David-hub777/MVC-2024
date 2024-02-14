@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MVC_2024.Controllers.VehiculoController.VehiculoTotal>
+
+@{
+    ViewData["Title"] = "Listado2";
+}
+
+<h1>Listado2</h1>
+
+<p>
+    <a asp-action="Create">Create New Vehiculo</a>
+</p>
+<form method="get" id="searchForm">
+    <div class="form-group">
+        <label for="color">Colores : </label>
+        <select id="color" name="color" class="form-control" asp-items="ViewBag.elcolor" onchange="this.form.submit()">
+            <option value="">Todos los Colores</option>
+        </select>
+        <input type="submit" value="Buscar!" class="btn btn-outline-primary" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayName("Serie")
+            </th>
+            <th>
+                @Html.DisplayName("Marca")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomSerie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomMarca)
+            </td>
+            <td>
+                <a asp-action="Details2" asp-route-id="@item.Matricula">Details2</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
