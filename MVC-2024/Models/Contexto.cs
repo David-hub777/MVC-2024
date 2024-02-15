@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using static MVC_2024.Controllers.VehiculoController;
+using MVC_2024.Models;
 
 namespace MVC_2024.Models
 {
@@ -9,6 +10,7 @@ namespace MVC_2024.Models
         public DbSet<SerieModelo> Series { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<VehiculoModelo> Vehiculos { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<SucursalModelo> Sucursales { get; set; }//Debe coincidir con la TABLA de la DB
+        public DbSet<Cliente> Clientes { get; set; }//Debe coincidir con la TABLA de la DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<VehiculoTotal>().HasNoKey();
@@ -25,5 +27,6 @@ namespace MVC_2024.Models
         {//Crea la DB Automatic
 
         }
+        public DbSet<MVC_2024.Models.Cliente>? Cliente { get; set; }
     }
 }
