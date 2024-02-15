@@ -33,8 +33,8 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController => IndexVehiculoTotal
         public ActionResult Listado2()
         {
-            List<VehiculoTotal> lista = this.Contexto.ViewTotal.ToList();
-            // var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
+            // List<VehiculoTotal> lista = this.Contexto.ViewTotal.ToList();
+             var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
             return View(lista);
         }
 

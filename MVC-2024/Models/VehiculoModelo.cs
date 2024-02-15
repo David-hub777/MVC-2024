@@ -1,4 +1,6 @@
-﻿namespace MVC_2024.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MVC_2024.Models
 {
     public class VehiculoModelo
     {
@@ -7,5 +9,10 @@
         public string Color { get; set; }
         public SerieModelo Serie { get; set; }
         public int SerieId { get; set; }
+
+        public List<VehiculoExtraModelo> VehiculoExtras { get; set; }
+
+        [NotMapped]
+        public List<int> ExtrasSeleccionados { get; set; }
     }
 }

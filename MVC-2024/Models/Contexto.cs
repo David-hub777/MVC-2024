@@ -11,6 +11,10 @@ namespace MVC_2024.Models
         public DbSet<VehiculoModelo> Vehiculos { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<SucursalModelo> Sucursales { get; set; }//Debe coincidir con la TABLA de la DB
         public DbSet<Cliente> Clientes { get; set; }//Debe coincidir con la TABLA de la DB
+        public DbSet<ExtraModelo> Extras { get; set; }//Debe coincidir con la TABLA de la DB
+        public DbSet<VehiculoExtraModelo> VehiculoExtras { get; set; }//Debe coincidir con la TABLA de la DB
+        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<VehiculoTotal>().HasNoKey();
@@ -27,6 +31,6 @@ namespace MVC_2024.Models
         {//Crea la DB Automatic
 
         }
-        public DbSet<MVC_2024.Models.Cliente>? Cliente { get; set; }
+        // public DbSet<MVC_2024.Models.Cliente>? Cliente { get; set; }
     }
 }
