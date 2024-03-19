@@ -34,7 +34,8 @@ namespace MVC_2024.Controllers
         public ActionResult Listado2()
         {
             // List<VehiculoTotal> lista = this.Contexto.ViewTotal.ToList();
-             var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
+            var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
+            //var lista = this.Contexto.ViewTotal.FromSql($"EXECUTE getSeriesVehiculos");
             return View(lista);
         }
 
@@ -67,7 +68,22 @@ namespace MVC_2024.Controllers
         // GET: VehiculoController
         public ActionResult Index()
         {
-            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).ToList();
+            List<VehiculoModelo> lista = this.Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).Include(x => x.Combustible).Include(v => v.VehiculoExtras).ThenInclude(ve => ve.extra).ToList();
+            return View(lista);
+        }
+
+        // GET: VehiculoController/BuscadorCombustible ( EXAMEN )
+        public ActionResult BuscadorCombustible(int combustibleIdentificador  = 0)
+        {
+            ViewBag.Combustibles = new SelectList(Contexto.Combustibles, "Id", "NomCombustible", combustibleIdentificador);
+            var lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).Include(x => x.Combustible).Include(v => v.VehiculoExtras).ThenInclude(ve => ve.extra)
+                        where (v.CombustibleId.Equals(combustibleIdentificador))
+                        select v;
+            if (combustibleIdentificador == 0)
+            {
+                lista = from v in Contexto.Vehiculos.Include(s => s.Serie).Include(m => m.Serie.Marca).Include(x => x.Combustible).Include(v => v.VehiculoExtras).ThenInclude(ve => ve.extra)
+                        select v;
+            }
             return View(lista);
         }
 
@@ -88,12 +104,23 @@ namespace MVC_2024.Controllers
         }
 
         // GET: VehiculoController/Details2/matriculaElegida
-        public ActionResult Details2(String id)
+        public ActionResult Details2(String Matricula)
         {
-            if (id != null)
+            if (Matricula != null)
             {
-                VehiculoTotal vehiculo = Contexto.ViewTotal.FirstOrDefault(v => v.Matricula == id);
-                return View(vehiculo);
+                //var Matricula = id;
+                var lista = this.Contexto.ViewTotal.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
+                //var lista = this.Contexto.ViewTotalius.FromSql($"SELECT dbo.Marcas.NomMarca, dbo.Series.NomSerie, dbo.Vehiculos.Matricula, dbo.Vehiculos.Color\r\n\tFROM     dbo.Marcas INNER JOIN\r\n                  dbo.Series ON dbo.Marcas.Id = dbo.Series.MarcaId INNER JOIN\r\n                  dbo.Vehiculos ON dbo.Series.Id = dbo.Vehiculos.SerieId");
+                //var lista = Contexto.ViewTotalius.Include(s => s.Matricula).Include(s => s.NomMarca).Include(s => s.NomSerie).Include(s => s.Color).ToList();
+                foreach (var item in lista)
+                {
+                    if (item.Matricula == Matricula)
+                    {
+                        return View(item);
+                    }
+                }
+
+                return View(lista);
             }
             else
             {
@@ -105,6 +132,8 @@ namespace MVC_2024.Controllers
         public ActionResult Create()
         {
             ViewBag.SerieId = new SelectList(Contexto.Series, "Id", "NomSerie");
+            ViewBag.Combustibles = new SelectList(Contexto.Combustibles, "Id", "NomCombustible");
+            ViewBag.VehiculoExtras = new MultiSelectList(this.Contexto.Extras, "Id", "NomModelo");
             return View();
         }
 
@@ -117,6 +146,19 @@ namespace MVC_2024.Controllers
             Contexto.Database.EnsureCreated();
             //Contexto.Database.AutoSavepointsEnabled = true;//Que hace esto?
             Contexto.SaveChanges();
+            foreach (var extraId in vehiculoModelo.ExtrasSeleccionados)
+            {
+                //var obj = new VehiculoExtraModelo()
+                //{
+                //    extraId = extraId,
+                //    vehiculoId = vehiculoModelo.Id
+                //}
+                VehiculoExtraModelo vehiculoExtra = new VehiculoExtraModelo();
+                vehiculoExtra.vehiculoId = vehiculoModelo.Id;
+                vehiculoExtra.extraId = extraId;
+                Contexto.VehiculoExtras.Add(vehiculoExtra);
+                Contexto.SaveChanges();
+            }
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -131,7 +173,10 @@ namespace MVC_2024.Controllers
         public ActionResult Edit(int id)
         {
             ViewBag.SerieId = new SelectList(Contexto.Series, "Id", "NomSerie");
+            ViewBag.VehiculoExtras = new MultiSelectList(this.Contexto.Extras, "Id", "NomModelo");
             VehiculoModelo elemento = this.Contexto.Vehiculos.Find(id);
+            elemento.ExtrasSeleccionados = this.Contexto.VehiculoExtras.Where(ve => ve.vehiculoId == id).Select(ve => ve.extraId).ToList();
+            ViewBag.VehiculoExtras = new MultiSelectList(this.Contexto.Extras, "Id", "NomModelo", elemento.ExtrasSeleccionados);
             if (elemento != null)
             {
                 return View(elemento);
@@ -153,6 +198,24 @@ namespace MVC_2024.Controllers
                 if (elemento != null)
                 {
                     cambioVehiculo(vehiculoModelo, elemento);
+                    Contexto.SaveChanges();
+                    var extrasActuales = this.Contexto.VehiculoExtras.Where(ve => ve.vehiculoId == id);//.Select(ve => ve.extraId).ToList();
+                    //var extrasSeleccionados = vehiculoModelo.ExtrasSeleccionados;
+                    //var extrasParaBorrar = extrasActuales.Except(extrasSeleccionados);
+                    //var extrasParaAnadir = extrasSeleccionados.Except(extrasActuales);
+                    foreach (var extrasParaBorrar in extrasActuales)
+                    {
+                        //VehiculoExtraModelo vehiculoExtra = this.Contexto.VehiculoExtras.FirstOrDefault(ve => ve.extraId == extraId && ve.vehiculoId == id);
+                        Contexto.VehiculoExtras.Remove(extrasParaBorrar);
+                        
+                    }
+                    foreach (var extraId in vehiculoModelo.ExtrasSeleccionados)
+                    {
+                        VehiculoExtraModelo vehiculoExtra = new VehiculoExtraModelo();
+                        vehiculoExtra.vehiculoId = vehiculoModelo.Id;
+                        vehiculoExtra.extraId = extraId;
+                        Contexto.VehiculoExtras.Add(vehiculoExtra);
+                    }
                     Contexto.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }

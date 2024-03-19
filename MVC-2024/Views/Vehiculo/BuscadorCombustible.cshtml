@@ -7,8 +7,20 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Vehiculo</a>
 </p>
+
+<form method="get" id="searchForm">
+    <div class="form-group">
+        <label for="combustibleIdentificador">Marcas : </label>
+        <select id="combustibleIdentificador" name="combustibleIdentificador" class="form-control" asp-items="ViewBag.Combustibles" onchange="this.form.submit()">
+            <option value="">-- Selecciona un combustible --</option>
+        </select>
+        <input type="submit" value="Buscar!" class="btn btn-primary" />
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>

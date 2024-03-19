@@ -29,6 +29,18 @@
                 </select>
             </div>
             <div class="form-group">
+                <label asp-for="CombustibleId" class="control-label"></label>
+                <select asp-for="CombustibleId" class="form-control" asp-items="ViewBag.Combustibles">
+                    <option value="">Elige...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExtrasSeleccionados" class="control-label"></label>
+                <select multiple asp-for="ExtrasSeleccionados" class="form-control" asp-items="ViewBag.VehiculoExtras">
+                    <option value="">Sin accesorios</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
